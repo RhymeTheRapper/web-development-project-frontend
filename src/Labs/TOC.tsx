@@ -19,6 +19,14 @@ export default function TOC() {
       <li>
         <Link to="/Kanbas">Kanbas</Link>
       </li>
+      <li>
+        <Link
+          to="https://github.com/RhymeTheRapper/web-development"
+          id="wd-github"
+        >
+          GitHub
+        </Link>
+      </li>
     </ul>
   );
 }
