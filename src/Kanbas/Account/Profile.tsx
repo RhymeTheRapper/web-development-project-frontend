@@ -2,32 +2,55 @@ import { Link } from "react-router-dom";
 export default function Profile() {
   return (
     <div id="wd-profile-screen">
-      <h3>Profile</h3>
-      <input id="wd-username" value="alice" placeholder="username" />
-      <br />
+      <h1>Profile</h1>
+      <input
+        id="wd-username"
+        placeholder="username"
+        value="alice"
+        className="form-control mb-2"
+      />
       <input
         id="wd-password"
-        value="123"
         placeholder="password"
+        value="123"
+        className="form-control mb-2"
         type="password"
       />
-      <br />
-      <input id="wd-firstname" value="Alice" placeholder="First Name" />
-      <br />
-      <input id="wd-lastname" value="Wonderland" placeholder="Last Name" />
-      <br />
-      <input id="wd-dob" value="2000-01-01" type="date" />
-      <br />
-      <input id="wd-email" value="alice@wonderland" type="email" />
-      <br />
-      <select id="wd-role">
-        <option value="USER">User</option>
+      <input
+        id="wd-firstname"
+        placeholder="First Name"
+        value="Alice"
+        className="form-control mb-2"
+      />
+      <input
+        id="wd-lastname"
+        placeholder="Last Name"
+        value="Wonderland"
+        className="form-control mb-2"
+      />
+      <input
+        id="wd-dob"
+        value="2000-01-01"
+        className="form-control mb-2"
+        type="date"
+      />
+      <input
+        id="wd-email"
+        value="alice@wonderland"
+        className="form-control mb-2"
+        type="email"
+      />
+      <select id="wd-role" className="form-select mb-2">
+        <option selected value="USER">
+          User
+        </option>
         <option value="ADMIN">Admin</option>
         <option value="FACULTY">Faculty</option>
         <option value="STUDENT">Student</option>
       </select>
-      <br />
-      <Link to="/Kanbas/Account/Signin">Sign out</Link>
+      <Link id="wd-signout-link" to="/Kanbas/Account/Signin" className="btn btn-danger w-100">
+        Sign Out
+      </Link>
     </div>
   );
 }
