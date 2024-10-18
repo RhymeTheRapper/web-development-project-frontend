@@ -8,8 +8,13 @@ import {
   MdOutlineAssignment,
 } from "react-icons/md";
 import AssignmentControlButtons from "./AssignmentControlButtons";
+import { useParams } from "react-router";
+import * as db from "../../Database";
+import { Link } from "react-router-dom";
 
 export default function Assignments() {
+  const { cid } = useParams();
+  const assignments = db.assignments;
   return (
     <div id="wd-assignments">
       <button
@@ -52,75 +57,34 @@ export default function Assignments() {
             className="wd-assignment-list list-group rounded-0"
             style={{ borderLeft: "3px solid green" }}
           >
-            <li className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex align-items-center">
-              <BsGripVertical className="me-2 fs-3" />
-              <MdOutlineAssignment
-                className="me-2 fs-3"
-                style={{ color: "green" }}
-              />
-              <div className="flex-grow-1 ">
-                <a
-                  className="wd-assignment-link"
-                  href="#/Kanbas/Courses/1234/Assignments/123"
-                >
-                  A1 - ENV + HTML
-                </a>
-                <div>
-                  <span style={{ color: "red" }}>Multiple Modules</span> |{" "}
-                  <strong>Not available until</strong> May 6 at 12:00am |
-                </div>
-                <div>
-                  <strong>Due</strong> May 13 at 11:59pm | 100 pts
-                </div>
-              </div>
-              <LessonControlButtons />
-            </li>
-            <li className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex align-items-center">
-              <BsGripVertical className="me-2 fs-3" />
-              <MdOutlineAssignment
-                className="me-2 fs-3"
-                style={{ color: "green" }}
-              />
-              <div className="flex-grow-1 ">
-                <a
-                  className="wd-assignment-link"
-                  href="#/Kanbas/Courses/1234/Assignments/124"
-                >
-                  A2 - CSS + BOOTSTRAP
-                </a>
-                <div>
-                  <span style={{ color: "red" }}>Multiple Modules</span> |{" "}
-                  <strong>Not available until</strong> May 13 at 12:00am |
-                </div>
-                <div>
-                  <strong>Due</strong> May 20 at 11:59pm | 100 pts
-                </div>
-              </div>
-              <LessonControlButtons />
-            </li>
-            <li className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex align-items-center">
-              <BsGripVertical className="me-2 fs-3" />
-              <MdOutlineAssignment
-                className="me-2 fs-3"
-                style={{ color: "green" }}
-              />
-              <div className="flex-grow-1 ">
-                <a
-                  className="wd-assignment-link"
-                  href="#/Kanbas/Courses/1234/Assignments/125"
-                >
-                  A3 - JAVASCRIPT + REACT
-                </a>
-                <div>
-                  <span style={{ color: "red" }}>Multiple Modules</span> |{" "}
-                  <strong>Not available until</strong> May 20 at 12:00am |
-                </div>
-                <div>
-                  <strong>Due</strong> May 27 at 11:59pm | 100 pts
-                </div>
-              </div>
-              <LessonControlButtons />
-            </li>
+            {assignments
+              .filter((assignment: any) => assignment.course === cid)
+              .map((assignment: any) => (
+                <li className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex align-items-center">
+                  <BsGripVertical className="me-2 fs-3" />
+                  <MdOutlineAssignment
+                    className="me-2 fs-3"
+                    style={{ color: "green" }}
+                  />
+                  <div className="flex-grow-1 ">
+                    <Link
+                      className="wd-assignment-link"
+                      to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                    >
+                      {assignment.title}
+                    </Link>
+                    <div>
+                      <span style={{ color: "red" }}>Multiple Modules</span> |{" "}
+                      <strong>Not available until</strong>{" "}
+                      {assignment.available} |{" "}
+                    </div>
+                    <div>
+                      <strong>Due</strong> {assignment.due} |{" "}
+                      {assignment.points} pts
+                    </div>
+                  </div>
+                </li>
+              ))}
           </ul>
         </li>
       </ul>
