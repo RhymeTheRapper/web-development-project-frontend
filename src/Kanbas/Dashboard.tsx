@@ -123,12 +123,20 @@ export default function Dashboard({
                       style={{ width: "300px" }}
                     >
                       <div className="card rounded-3 overflow-hidden">
-                        <Link
+                        {enrolledCourses.includes(course) ? (
+                                                  <Link
                           to={`/Kanbas/Courses/${course._id}/Home`}
                           className="wd-dashboard-course-link text-decoration-none text-dark"
                         >
                           <img src={course.jpg} width="100%" height={160} />
                         </Link>
+                        ) : (
+                                                  <Link
+                          to={`/Kanbas/Dashboard`}
+                          className="wd-dashboard-course-link text-decoration-none text-dark"
+                        >
+                          <img src={course.jpg} width="100%" height={160} />
+                        </Link>)}
                         <div className="card-body">
                           <h5 className="wd-dashboard-course-title card-title">
                             {course.name}
@@ -139,12 +147,20 @@ export default function Dashboard({
                           >
                             {course.description}
                           </p>
-                          <Link
+                          {enrolledCourses.includes(course) ? (
+                                                      <Link
                             to={`/Kanbas/Courses/${course._id}/Home`}
                             className="btn btn-primary"
                           >
                             Go
                           </Link>
+                          ) : (
+                                                      <Link
+                            to={`/Kanbas/Dashboard`}
+                            className="btn btn-primary"
+                          >
+                            Go
+                          </Link>)}
                           {enrolledCourses.includes(course) ? (
                             <button
                               className="btn btn-danger ms-1 align-content-center"
