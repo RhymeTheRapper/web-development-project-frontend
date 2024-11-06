@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { enrollments } from "/Users/rhymedochtermann/2024/fall/webdev/kanbas-react-web-app/src/Kanbas/Database";
+import { enrollments } from "../Kanbas/Database";
 const initialState = {
   enrollments: enrollments,
 };
