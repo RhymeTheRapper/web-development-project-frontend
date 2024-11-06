@@ -1,16 +1,15 @@
 import CoursesNavigation from "./Navigation";
 import Modules from "./Modules";
 import Home from "./Home";
-import { courses } from "../Database";
 import Assignments from "./Assignment";
 import AssignmentEditor from "./Assignment/Editor";
 import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
 import { FaAlignJustify } from "react-icons/fa";
 import PeopleTable from "./People/Table";
-export default function Courses() {
-    const { cid } = useParams();
+export default function Courses({ courses }: { courses: any[] }) {
+  const { cid } = useParams();
   const course = courses.find((course) => course._id === cid);
-    const { pathname } = useLocation();
+  const { pathname } = useLocation();
   return (
     <div id="wd-courses">
       <h2 className="text-danger">

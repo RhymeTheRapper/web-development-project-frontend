@@ -11,32 +11,56 @@ import AssignmentControlButtons from "./AssignmentControlButtons";
 import { useParams } from "react-router";
 import * as db from "../../Database";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { FaTrash } from "react-icons/fa";
+import { deleteAssignment } from "./reducer";
+import { useState } from "react";
+import { Button, Modal } from "react-bootstrap";
 
 export default function Assignments() {
+  const dispatch = useDispatch();
   const { cid } = useParams();
-  const assignments = db.assignments;
+  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const [showModal, setShowModal] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
+  const handleDeleteClick = (assignmentId: string) => {
+     setDeleteId(assignmentId);
+     setShowModal(true);
+  };
+    const handleDeleteConfirm = () => {
+      dispatch(deleteAssignment(deleteId));
+      setDeleteId("");
+      setShowModal(false);
+    };
+  
   return (
     <div id="wd-assignments">
-      <button
-        id="wd-add-assignment"
-        className="btn btn-lg btn-danger me-1 float-end"
-      >
-        <BsPlusLg
-          className="position-relative me-2"
-          style={{ bottom: "1px" }}
-        />
-        Assignment
-      </button>
-      <button
-        id="wd-add-assignment"
-        className="btn btn-lg btn-secondary me-1 float-end"
-      >
-        <BsPlusLg
-          className="position-relative me-2"
-          style={{ bottom: "1px" }}
-        />
-        Group
-      </button>
+      {currentUser.role === "FACULTY" && (
+        <>
+          <Link
+            to={`/Kanbas/Courses/${cid}/Assignments/new`}
+            id="wd-add-assignment"
+            className="btn btn-lg btn-danger me-1 float-end"
+          >
+            <BsPlusLg
+              className="position-relative me-2"
+              style={{ bottom: "1px" }}
+            />
+            Assignment
+          </Link>
+          <button
+            id="wd-add-assignment"
+            className="btn btn-lg btn-secondary me-1 float-end"
+          >
+            <BsPlusLg
+              className="position-relative me-2"
+              style={{ bottom: "1px" }}
+            />
+            Group
+          </button>
+        </>
+      )}
       <div className="search-container">
         <HiMagnifyingGlass className="search-icon" />
         <input
@@ -83,11 +107,35 @@ export default function Assignments() {
                       {assignment.points} pts
                     </div>
                   </div>
+                  {currentUser.role === "FACULTY" && (
+                    <FaTrash
+                      className="text-danger"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleDeleteClick(assignment._id)}
+                    />
+                  )}
                 </li>
               ))}
           </ul>
         </li>
       </ul>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Removal</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to remove this assignment?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteConfirm}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
