@@ -1,0 +1,25 @@
+[
+  {
+    "_id": "Q101",
+    "title": "Q1 - HTML",
+    "course": "RS101",
+    "available": "May 6 at 12:00am",
+    "due": "May 13 at 11:59pm",
+    "points": 100,
+    "questions": 15,
+    "due_date": "2024-05-13",
+    "available_date": "2024-05-06",
+    "until_date": "2024-05-13"
+  },
+  {
+    "_id": "Q102",
+    "title": "Q2 - CSS",
+    "course": "RS101",
+    "available": "May 7 at 12:00am",
+    "due": "May 14 at 11:59pm",
+    "points": 100,
+    "questions": 14,
+    "due_date": "2024-05-14",
+    "available_date": "2024-05-07"
+  }
+]
