@@ -73,7 +73,25 @@ export default function TOC() {
           href="https://github.com/RhymeTheRapper/web-development"
           className="nav-link"
         >
-          My GitHub
+          FrontEnd GitHub
+        </a>
+      </li>
+      <li className="nav-item">
+        <a
+          id="wd-k"
+          href="https://github.com/RhymeTheRapper/kanbas-node-server-app"
+          className="nav-link"
+        >
+          BackEnd GitHub
+        </a>
+      </li>
+      <li className="nav-item">
+        <a
+          id="wd-k"
+          href="https://kanbas-node-server-app-sea9.onrender.com"
+          className="nav-link"
+        >
+          Render Link
         </a>
       </li>
     </ul>
