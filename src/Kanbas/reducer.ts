@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { enrollments } from "../Kanbas/Database";
 const initialState = {
-  enrollments: enrollments,
+  enrollments: [],
 };
 
 const enrollmentsSlice = createSlice({
@@ -26,6 +25,5 @@ const enrollmentsSlice = createSlice({
     },
   },
 });
-export const { addEnrollment, deleteEnrollment } =
-  enrollmentsSlice.actions;
+export const { addEnrollment, deleteEnrollment } = enrollmentsSlice.actions;
 export default enrollmentsSlice.reducer;

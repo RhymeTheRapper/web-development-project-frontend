@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import * as db from "./Database";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addEnrollment, deleteEnrollment } from "./reducer";
+import * as enrollmentClient from "./client";
+import * as courseClient from "./Courses/client";
 export default function Dashboard({
   courses,
   course,
@@ -10,6 +11,8 @@ export default function Dashboard({
   addNewCourse,
   deleteCourse,
   updateCourse,
+  onDeleteEnrollment,
+  enrollUser,
 }: {
   courses: any[];
   course: any;
@@ -17,17 +20,21 @@ export default function Dashboard({
   addNewCourse: () => void;
   deleteCourse: (course: any) => void;
   updateCourse: () => void;
+  onDeleteEnrollment: (courseId: any) => void;
+  enrollUser: (courseId: string) => void;
 }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
   const [enrollmentState, setEnrollmentState] = useState("");
   const [enrollmentOpen, setEnrollmentOpen] = useState(false);
-  const [enrolledCourses, setEnrolledCourses] = useState([] as any);
+  let enrolledCourses = courses;
+  const [allCourses, setAllCourses] = useState([] as any);
+  const [enrollments, setEnrollments] = useState([] as any);
   const dispatch = useDispatch();
-  
+
   const handleEnrollmentClick = () => {
     setEnrollmentOpen(true);
     if (enrollmentState === "") {
+      fetchAllCourses();
       setEnrollmentState("all");
     }
     if (enrollmentState === "all") {
@@ -39,21 +46,10 @@ export default function Dashboard({
     }
   };
 
-  const onDeleteEnrollment = (courseId: any) => {
-    const enrollmentId = enrollments.find((e: any) => { return e.course === courseId && e.user === currentUser._id })._id ?? "";
-    dispatch(deleteEnrollment(enrollmentId));
-  }
-
-  useEffect(() => { 
-    const enrolled = courses.filter((course) =>
-      enrollments.some(
-        (enrollment: any) =>
-          enrollment.user === currentUser._id &&
-          enrollment.course === course._id
-      )
-    );
-    setEnrolledCourses(enrolled);
-  }, [courses, currentUser._id, enrollments])
+  const fetchAllCourses = async () => {
+    const allCourseList = await courseClient.fetchAllCourses();
+    setAllCourses(allCourseList);
+  };
 
   return (
     <div id="wd-dashboard">
@@ -97,7 +93,7 @@ export default function Dashboard({
         <h2 id="wd-dashboard-published" className="flex-grow-1">
           Courses (
           {currentUser.role === "STUDENT" && enrollmentState === "all"
-            ? courses.length
+            ? allCourses.length
             : enrolledCourses.length}
           )
         </h2>
@@ -115,7 +111,7 @@ export default function Dashboard({
         <>
           <div id="wd-dashboard-courses" className="row">
             <div className="row row-cols-1 row-cols-md-5 g-4">
-              {(enrollmentState === "all" ? courses : enrolledCourses).map(
+              {(enrollmentState === "all" ? allCourses : enrolledCourses).map(
                 (course: any) => (
                   <>
                     <div
@@ -123,20 +119,23 @@ export default function Dashboard({
                       style={{ width: "300px" }}
                     >
                       <div className="card rounded-3 overflow-hidden">
-                        {enrolledCourses.includes(course) ? (
-                                                  <Link
-                          to={`/Kanbas/Courses/${course._id}/Home`}
-                          className="wd-dashboard-course-link text-decoration-none text-dark"
-                        >
-                          <img src={course.jpg} width="100%" height={160} />
-                        </Link>
+                        {enrolledCourses
+                          .map((course) => course._id)
+                          .includes(course._id) ? (
+                          <Link
+                            to={`/Kanbas/Courses/${course._id}/Home`}
+                            className="wd-dashboard-course-link text-decoration-none text-dark"
+                          >
+                            <img src={course.jpg} width="100%" height={160} />
+                          </Link>
                         ) : (
-                                                  <Link
-                          to={`/Kanbas/Dashboard`}
-                          className="wd-dashboard-course-link text-decoration-none text-dark"
-                        >
-                          <img src={course.jpg} width="100%" height={160} />
-                        </Link>)}
+                          <Link
+                            to={`/Kanbas/Dashboard`}
+                            className="wd-dashboard-course-link text-decoration-none text-dark"
+                          >
+                            <img src={course.jpg} width="100%" height={160} />
+                          </Link>
+                        )}
                         <div className="card-body">
                           <h5 className="wd-dashboard-course-title card-title">
                             {course.name}
@@ -147,21 +146,26 @@ export default function Dashboard({
                           >
                             {course.description}
                           </p>
-                          {enrolledCourses.includes(course) ? (
-                                                      <Link
-                            to={`/Kanbas/Courses/${course._id}/Home`}
-                            className="btn btn-primary"
-                          >
-                            Go
-                          </Link>
+                          {enrolledCourses
+                            .map((course) => course._id)
+                            .includes(course._id) ? (
+                            <Link
+                              to={`/Kanbas/Courses/${course._id}/Home`}
+                              className="btn btn-primary"
+                            >
+                              Go
+                            </Link>
                           ) : (
-                                                      <Link
-                            to={`/Kanbas/Dashboard`}
-                            className="btn btn-primary"
-                          >
-                            Go
-                          </Link>)}
-                          {enrolledCourses.includes(course) ? (
+                            <Link
+                              to={`/Kanbas/Dashboard`}
+                              className="btn btn-primary"
+                            >
+                              Go
+                            </Link>
+                          )}
+                          {enrolledCourses
+                            .map((course) => course._id)
+                            .includes(course._id) ? (
                             <button
                               className="btn btn-danger ms-1 align-content-center"
                               onClick={() => onDeleteEnrollment(course._id)}
@@ -172,12 +176,7 @@ export default function Dashboard({
                             <button
                               className="btn btn-success ms-1 align-content-center"
                               onClick={() => {
-                                dispatch(
-                                  addEnrollment({
-                                    courseId: course._id,
-                                    userId: currentUser._id,
-                                  })
-                                );
+                                enrollUser(course._id);
                               }}
                             >
                               Enroll

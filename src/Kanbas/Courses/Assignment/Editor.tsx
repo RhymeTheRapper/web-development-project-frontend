@@ -1,27 +1,45 @@
 import { useParams } from "react-router";
 import * as db from "../../Database";
 import { Link, useNavigate } from "react-router-dom";
-import { addAssignment, deleteAssignment, updateAssignment } from "./reducer"; 
+import { addAssignment, deleteAssignment, updateAssignment } from "./reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { assignments } = useSelector((state: any) => state.assignmentsReducer);
-  let assignment = assignments.find((assignment: any) => assignment._id === aid) ??
-    { title: "", description: "", points: 0, due_date: "", available_date: "", until_date: "" };
-  
-  const [assignmentName, setAssignmentName] = useState(assignment.title);
-  const [assignmentDescription, setAssignmentDescription] = useState(assignment.description);
-  const [assignmentPoints, setAssignmentPoints] = useState(assignment.points);
-  const [assignmentDueDate, setAssignmentDueDate] = useState(assignment.due_date);
-  const [assignmentAvailableDate, setAssignmentAvailableDate] = useState(assignment.available_date);
-  const [assignmentUntilDate, setAssignmentUntilDate] = useState(assignment.until_date);
+  let assignment = assignments.find(
+    (assignment: any) => assignment._id === aid
+  ) ?? {
+    title: "",
+    description: "",
+    points: 0,
+    due_date: "",
+    available_date: "",
+    until_date: "",
+  };
 
-  const onSave = () => {
+  const [assignmentName, setAssignmentName] = useState(assignment.title);
+  const [assignmentDescription, setAssignmentDescription] = useState(
+    assignment.description
+  );
+  const [assignmentPoints, setAssignmentPoints] = useState(assignment.points);
+  const [assignmentDueDate, setAssignmentDueDate] = useState(
+    assignment.due_date
+  );
+  const [assignmentAvailableDate, setAssignmentAvailableDate] = useState(
+    assignment.available_date
+  );
+  const [assignmentUntilDate, setAssignmentUntilDate] = useState(
+    assignment.until_date
+  );
+
+  const onSave = async () => {
+    if (!cid) return;
     const isEditing = aid !== "new";
 
     const newAssignment = {
@@ -46,15 +64,20 @@ export default function AssignmentEditor() {
         }) + " at 11:59pm",
       until_date: assignmentUntilDate,
     };
-
     if (isEditing) {
+      await assignmentsClient.updateAssignment(assignment);
       dispatch(updateAssignment(newAssignment));
+      console.log("Updated assignment", newAssignment);
     } else {
-      dispatch(addAssignment(newAssignment));
+      const assignment = await coursesClient.createAssignmentForCourse(
+        cid,
+        newAssignment
+      );
+      dispatch(addAssignment(assignment));
     }
 
     navigate("/Kanbas/Courses/" + cid + "/Assignments");
-  }
+  };
 
   return (
     <div id="wd-add-assignment-dialog" className="container">
@@ -227,7 +250,9 @@ export default function AssignmentEditor() {
                       type="date"
                       id="wd-available-from"
                       className="form-control"
-                      onChange={(e) => setAssignmentAvailableDate(e.target.value)}
+                      onChange={(e) =>
+                        setAssignmentAvailableDate(e.target.value)
+                      }
                       value={assignmentAvailableDate}
                     />
                   </div>

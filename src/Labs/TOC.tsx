@@ -44,7 +44,7 @@ export default function TOC() {
           Lab 4
         </a>
       </li>
-      {/* <li className="nav-item">
+      <li className="nav-item">
         <a
           id="wd-a5"
           href="#/Labs/Lab5"
@@ -53,7 +53,7 @@ export default function TOC() {
           Lab 5
         </a>
       </li>
-      <li className="nav-item">
+      {/* <li className="nav-item">
         <a
           id="wd-a6"
           href="#/Labs/Lab6"

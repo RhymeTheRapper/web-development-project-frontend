@@ -13,10 +13,11 @@ import * as db from "../../Database";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa";
-import { deleteAssignment } from "./reducer";
-import { useState } from "react";
+import { setAssignments, deleteAssignment } from "./reducer";
+import { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
-
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 export default function Assignments() {
   const dispatch = useDispatch();
   const { cid } = useParams();
@@ -25,15 +26,27 @@ export default function Assignments() {
   const [showModal, setShowModal] = useState(false);
   const [deleteId, setDeleteId] = useState("");
   const handleDeleteClick = (assignmentId: string) => {
-     setDeleteId(assignmentId);
-     setShowModal(true);
+    setDeleteId(assignmentId);
+    setShowModal(true);
   };
-    const handleDeleteConfirm = () => {
-      dispatch(deleteAssignment(deleteId));
-      setDeleteId("");
-      setShowModal(false);
-    };
-  
+  const handleDeleteConfirm = async () => {
+    await assignmentsClient.deleteAssignment(deleteId);
+    dispatch(deleteAssignment(deleteId));
+    setDeleteId("");
+    setShowModal(false);
+  };
+
+  const fetchAssignments = async () => {
+    const assignments = await coursesClient.findAssignmentsForCourse(
+      cid as string
+    );
+    dispatch(setAssignments(assignments));
+    console.log("assignments", assignments);
+  };
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+
   return (
     <div id="wd-assignments">
       {currentUser.role === "FACULTY" && (
