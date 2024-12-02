@@ -113,79 +113,78 @@ export default function Dashboard({
             <div className="row row-cols-1 row-cols-md-5 g-4">
               {(enrollmentState === "all" ? allCourses : enrolledCourses).map(
                 (course: any) => (
-                  <>
-                    <div
-                      className="wd-dashboard-course col"
-                      style={{ width: "300px" }}
-                    >
-                      <div className="card rounded-3 overflow-hidden">
+                  <div
+                    key={course._id}
+                    className="wd-dashboard-course col"
+                    style={{ width: "300px" }}
+                  >
+                    <div className="card rounded-3 overflow-hidden">
+                      {enrolledCourses
+                        .map((course) => course._id)
+                        .includes(course._id) ? (
+                        <Link
+                          to={`/Kanbas/Courses/${course._id}/Home`}
+                          className="wd-dashboard-course-link text-decoration-none text-dark"
+                        >
+                          <img src={course.jpg} width="100%" height={160} />
+                        </Link>
+                      ) : (
+                        <Link
+                          to={`/Kanbas/Dashboard`}
+                          className="wd-dashboard-course-link text-decoration-none text-dark"
+                        >
+                          <img src={course.jpg} width="100%" height={160} />
+                        </Link>
+                      )}
+                      <div className="card-body">
+                        <h5 className="wd-dashboard-course-title card-title">
+                          {course.name}
+                        </h5>
+                        <p
+                          className="wd-dashboard-course-title card-text overflow-y-hidden"
+                          style={{ maxHeight: 100 }}
+                        >
+                          {course.description}
+                        </p>
                         {enrolledCourses
                           .map((course) => course._id)
                           .includes(course._id) ? (
                           <Link
                             to={`/Kanbas/Courses/${course._id}/Home`}
-                            className="wd-dashboard-course-link text-decoration-none text-dark"
+                            className="btn btn-primary"
                           >
-                            <img src={course.jpg} width="100%" height={160} />
+                            Go
                           </Link>
                         ) : (
                           <Link
                             to={`/Kanbas/Dashboard`}
-                            className="wd-dashboard-course-link text-decoration-none text-dark"
+                            className="btn btn-primary"
                           >
-                            <img src={course.jpg} width="100%" height={160} />
+                            Go
                           </Link>
                         )}
-                        <div className="card-body">
-                          <h5 className="wd-dashboard-course-title card-title">
-                            {course.name}
-                          </h5>
-                          <p
-                            className="wd-dashboard-course-title card-text overflow-y-hidden"
-                            style={{ maxHeight: 100 }}
+                        {enrolledCourses
+                          .map((course) => course._id)
+                          .includes(course._id) ? (
+                          <button
+                            className="btn btn-danger ms-1 align-content-center"
+                            onClick={() => onDeleteEnrollment(course._id)}
                           >
-                            {course.description}
-                          </p>
-                          {enrolledCourses
-                            .map((course) => course._id)
-                            .includes(course._id) ? (
-                            <Link
-                              to={`/Kanbas/Courses/${course._id}/Home`}
-                              className="btn btn-primary"
-                            >
-                              Go
-                            </Link>
-                          ) : (
-                            <Link
-                              to={`/Kanbas/Dashboard`}
-                              className="btn btn-primary"
-                            >
-                              Go
-                            </Link>
-                          )}
-                          {enrolledCourses
-                            .map((course) => course._id)
-                            .includes(course._id) ? (
-                            <button
-                              className="btn btn-danger ms-1 align-content-center"
-                              onClick={() => onDeleteEnrollment(course._id)}
-                            >
-                              Unenroll
-                            </button>
-                          ) : (
-                            <button
-                              className="btn btn-success ms-1 align-content-center"
-                              onClick={() => {
-                                enrollUser(course._id);
-                              }}
-                            >
-                              Enroll
-                            </button>
-                          )}
-                        </div>
+                            Unenroll
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-success ms-1 align-content-center"
+                            onClick={() => {
+                              enrollUser(course._id);
+                            }}
+                          >
+                            Enroll
+                          </button>
+                        )}
                       </div>
                     </div>
-                  </>
+                  </div>
                 )
               )}
             </div>
@@ -198,6 +197,7 @@ export default function Dashboard({
               <div
                 className="wd-dashboard-course col"
                 style={{ width: "300px" }}
+                key={course._id}
               >
                 <div className="card rounded-3 overflow-hidden">
                   <Link
