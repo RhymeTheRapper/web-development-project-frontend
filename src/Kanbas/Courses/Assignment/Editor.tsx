@@ -41,7 +41,6 @@ export default function AssignmentEditor() {
   const onSave = async () => {
     if (!cid) return;
     const isEditing = aid !== "new";
-
     const newAssignment = {
       _id: isEditing
         ? aid
@@ -65,9 +64,8 @@ export default function AssignmentEditor() {
       until_date: assignmentUntilDate,
     };
     if (isEditing) {
-      await assignmentsClient.updateAssignment(assignment);
+      await assignmentsClient.updateAssignment(newAssignment);
       dispatch(updateAssignment(newAssignment));
-      console.log("Updated assignment", newAssignment);
     } else {
       const assignment = await coursesClient.createAssignmentForCourse(
         cid,
