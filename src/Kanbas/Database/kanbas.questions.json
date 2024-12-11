@@ -1,0 +1,120 @@
+[{
+  "_id": {
+    "$oid": "675a226302b2321da153c68e"
+  },
+  "quiz": {
+    "$oid": "675a21c702b2321da153c685"
+  },
+  "type": "Multiple Choice",
+  "title": "Newton's Third Law Application",
+  "points": 10,
+  "description": "In a rocket engine, Newton's Third Law explains the production of thrust. Which of the following best describes this application?",
+  "options": [
+    {
+      "text": "The exhaust gases pushing backwards cause an equal and opposite force pushing the rocket forwards",
+      "isCorrect": true
+    },
+    {
+      "text": "The rocket pushes against the air to move forward",
+      "isCorrect": false
+    },
+    {
+      "text": "Gravity pulls the rocket upward",
+      "isCorrect": false
+    },
+    {
+      "text": "The fuel combustion directly produces forward motion",
+      "isCorrect": false
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "675a226302b2321da153c68f"
+  },
+  "quiz": {
+    "$oid": "675a21c702b2321da153c685"
+  },
+  "type": "True/False",
+  "title": "Rocket Fuel Storage",
+  "points": 5,
+  "description": "Liquid hydrogen must be stored at extremely cold temperatures to maintain its liquid state.",
+  "correctAnswer": true
+},
+{
+  "_id": {
+    "$oid": "675a226302b2321da153c690"
+  },
+  "quiz": {
+    "$oid": "675a21c702b2321da153c685"
+  },
+  "type": "Fill in the Blank",
+  "title": "Rocket Equation Variable",
+  "points": 15,
+  "description": "In the rocket equation, the symbol _____ represents the exhaust velocity.",
+  "correctAnswers": [
+    "Ve",
+    "ve",
+    "V_e"
+  ]
+},
+{
+  "_id": {
+    "$oid": "675a226302b2321da153c691"
+  },
+  "quiz": {
+    "$oid": "675a21c702b2321da153c686"
+  },
+  "type": "Multiple Choice",
+  "title": "Orbital Period",
+  "points": 10,
+  "description": "What happens to a satellite's orbital period when its orbital radius increases?",
+  "options": [
+    {
+      "text": "The period increases",
+      "isCorrect": true
+    },
+    {
+      "text": "The period decreases",
+      "isCorrect": false
+    },
+    {
+      "text": "The period stays the same",
+      "isCorrect": false
+    },
+    {
+      "text": "The period becomes zero",
+      "isCorrect": false
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "675a226302b2321da153c692"
+  },
+  "quiz": {
+    "$oid": "675a21c702b2321da153c686"
+  },
+  "type": "Fill in the Blank",
+  "title": "Kepler's Law",
+  "points": 10,
+  "description": "According to Kepler's _____ Law, planets sweep out equal areas in equal times.",
+  "correctAnswers": [
+    "Second",
+    "2nd",
+    "2"
+  ]
+},
+{
+  "_id": {
+    "$oid": "675a226302b2321da153c693"
+  },
+  "quiz": {
+    "$oid": "675a21c702b2321da153c687"
+  },
+  "type": "True/False",
+  "title": "Rocket Design Basic",
+  "points": 5,
+  "description": "The nose cone of a rocket is always perfectly pointed to minimize air resistance.",
+  "correctAnswer": false
+}]

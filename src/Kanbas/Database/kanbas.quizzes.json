@@ -1,0 +1,84 @@
+[{
+  "_id": {
+    "$oid": "675a21c702b2321da153c685"
+  },
+  "title": "Rocket Propulsion Fundamentals",
+  "course": {
+    "$oid": "67525de102b2321da153c631"
+  },
+  "description": "Test your knowledge of basic rocket propulsion concepts",
+  "type": "Graded Quiz",
+  "point": 100,
+  "status": "Published",
+  "assignmentGroup": "Quizzes",
+  "shuffleAnswer": "Yes",
+  "timeLimit": 30,
+  "multipleAttempts": "No",
+  "howManyAttempts": 1,
+  "showCorrectAnswers": "Immediately",
+  "accessCode": "",
+  "oneQuestionAtATime": "Yes",
+  "webcamRequired": "No",
+  "lockQuestionsAfterAnswering": "Yes",
+  "due": "May 13 at 11:59pm",
+  "available": "May 6 at 12:00am",
+  "dueDate": "2024-05-13",
+  "availableDate": "2024-05-06",
+  "untilDate": "2024-05-20"
+},
+{
+  "_id": {
+    "$oid": "675a21c702b2321da153c686"
+  },
+  "title": "Orbital Mechanics Quiz",
+  "course": {
+    "$oid": "67525de102b2321da153c631"
+  },
+  "description": "Mid-term assessment of orbital mechanics understanding",
+  "type": "Graded Quiz",
+  "point": 150,
+  "status": "Published",
+  "assignmentGroup": "Exams",
+  "shuffleAnswer": "Yes",
+  "timeLimit": 45,
+  "multipleAttempts": "Yes",
+  "howManyAttempts": 2,
+  "showCorrectAnswers": "After Deadline",
+  "accessCode": "ORBIT2024",
+  "oneQuestionAtATime": "Yes",
+  "webcamRequired": "Yes",
+  "lockQuestionsAfterAnswering": "Yes",
+  "due": "May 20 at 11:59pm",
+  "available": "May 15 at 12:00am",
+  "dueDate": "2024-05-20",
+  "availableDate": "2024-05-15",
+  "untilDate": "2024-05-27"
+},
+{
+  "_id": {
+    "$oid": "675a21c702b2321da153c687"
+  },
+  "title": "Rocket Design Practice",
+  "course": {
+    "$oid": "67525de102b2321da153c632"
+  },
+  "description": "Practice quiz for rocket design principles",
+  "type": "Practice Quiz",
+  "point": 0,
+  "status": "Published",
+  "assignmentGroup": "Quizzes",
+  "shuffleAnswer": "No",
+  "timeLimit": 0,
+  "multipleAttempts": "Yes",
+  "howManyAttempts": 999,
+  "showCorrectAnswers": "Immediately",
+  "accessCode": "",
+  "oneQuestionAtATime": "No",
+  "webcamRequired": "No",
+  "lockQuestionsAfterAnswering": "No",
+  "due": "May 30 at 11:59pm",
+  "available": "May 1 at 12:00am",
+  "dueDate": "2024-05-30",
+  "availableDate": "2024-05-01",
+  "untilDate": "2024-06-30"
+}]
