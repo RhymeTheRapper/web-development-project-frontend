@@ -113,7 +113,7 @@ export default function Quizzes() {
             <QuizControlButtons />
           </div>
           {quizzes.filter((quiz: any) => quiz.course === cid).length === 0 ? (
-            <div className="alert alert-info">
+            <div className="alert">
               No quizzes available. Click the "+ Quiz" button to create a new
               quiz.
             </div>

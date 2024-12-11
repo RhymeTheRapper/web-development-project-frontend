@@ -9,6 +9,9 @@ import PeopleTable from "./People/Table";
 import { useEffect, useState } from "react";
 import * as client from "./client";
 import Quizzes from "./Quizzes";
+import Questions from "./Quizzes/Questions";
+import QuizResults from "./Quizzes/Questions/ResultsPage";
+
 export default function Courses({ courses }: { courses: any[] }) {
   const { cid } = useParams();
   const course = courses.find((course) => course._id === cid);
@@ -46,6 +49,8 @@ export default function Courses({ courses }: { courses: any[] }) {
             <Route path="Assignments/:aid" element={<AssignmentEditor />} />
             <Route path="People" element={<PeopleTable users={users} />} />
             <Route path="Quizzes" element={<Quizzes />} />
+            <Route path="quizzes/:qid/take" element={<Questions />} />
+            <Route path="quizzes/:qid/results" element={<QuizResults />} />
           </Routes>
         </div>
       </div>
