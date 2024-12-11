@@ -1,20 +1,18 @@
 import { useParams } from "react-router";
 import * as db from "../../Database";
 import { Link, useNavigate } from "react-router-dom";
-import { addAssignment, deleteAssignment, updateAssignment } from "./reducer";
+import { addQuiz, deleteQuiz, updateQuiz } from "./reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import * as coursesClient from "../client";
-import * as assignmentsClient from "./client";
-export default function AssignmentEditor() {
+import * as quizzesClient from "./client";
+export default function QuizDetails() {
   const { cid, aid } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
-  let assignment = assignments.find(
-    (assignment: any) => assignment._id === aid
-  ) ?? {
+  const { quizzes } = useSelector((state: any) => state.quizzesReducer);
+  let quiz = quizzes.find((quiz: any) => quiz._id === aid) ?? {
     title: "",
     description: "",
     points: 0,
@@ -23,78 +21,71 @@ export default function AssignmentEditor() {
     until_date: "",
   };
 
-  const [assignmentName, setAssignmentName] = useState(assignment.title);
-  const [assignmentDescription, setAssignmentDescription] = useState(
-    assignment.description
+  const [quizTitle, setQuizTitle] = useState(quiz.title);
+  const [quizDescription, setQuizDescription] = useState(quiz.description);
+  const [quizPoints, setQuizPoints] = useState(quiz.points);
+  const [quizDueDate, setQuizDueDate] = useState(quiz.due_date);
+  const [quizAvailableDate, setQuizAvailableDate] = useState(
+    quiz.available_date
   );
-  const [assignmentPoints, setAssignmentPoints] = useState(assignment.points);
-  const [assignmentDueDate, setAssignmentDueDate] = useState(
-    assignment.due_date
-  );
-  const [assignmentAvailableDate, setAssignmentAvailableDate] = useState(
-    assignment.available_date
-  );
-  const [assignmentUntilDate, setAssignmentUntilDate] = useState(
-    assignment.until_date
-  );
+  const [quizUntilDate, setQuizUntilDate] = useState(quiz.until_date);
 
   const onSave = async () => {
     if (!cid) return;
     const isEditing = aid !== "new";
-    const newAssignment = {
+
+    const newQuiz = {
       _id: isEditing
         ? aid
-        : "A" + cid?.charAt(cid.length - 1) + db.assignments.length.toString(),
+        : "Q" + cid?.charAt(cid.length - 1) + quizzes.length.toString(),
       course: cid,
-      title: assignmentName,
-      description: assignmentDescription,
-      points: assignmentPoints,
-      due_date: assignmentDueDate,
+      title: quizTitle,
+      description: quizDescription,
+      points: quizPoints,
+      due_date: quizDueDate,
       due:
-        new Date(assignmentDueDate).toLocaleDateString("en-us", {
+        new Date(quizDueDate).toLocaleDateString("en-us", {
           month: "long",
           day: "numeric",
         }) + " at 11:59pm",
-      available_date: assignmentAvailableDate,
+      available_date: quizAvailableDate,
       available:
-        new Date(assignmentAvailableDate).toLocaleDateString("en-us", {
+        new Date(quizAvailableDate).toLocaleDateString("en-us", {
           month: "long",
           day: "numeric",
         }) + " at 11:59pm",
-      until_date: assignmentUntilDate,
+      until_date: quizUntilDate,
     };
     if (isEditing) {
-      await assignmentsClient.updateAssignment(newAssignment);
-      dispatch(updateAssignment(newAssignment));
+      await quizzesClient.updateQuiz(newQuiz);
+      dispatch(updateQuiz(newQuiz));
+      console.log("Updated quiz", newQuiz);
     } else {
-      const assignment = await coursesClient.createAssignmentForCourse(
-        cid,
-        newAssignment
-      );
-      dispatch(addAssignment(assignment));
+      const quiz = await coursesClient.createQuizForCourse(cid, newQuiz);
+      dispatch(addQuiz(quiz));
     }
 
-    navigate("/Kanbas/Courses/" + cid + "/Assignments");
+    navigate("/Kanbas/Courses/" + cid + "/Quizzes");
   };
 
   return (
-    <div id="wd-add-assignment-dialog" className="container">
+    <div id="wd-add-quiz-dialog" className="container">
       <>
         <div className="mb-3">
           <label htmlFor="wd-name">
-            <strong style={{ fontSize: "18px" }}> Assignment Name</strong>
+            <strong style={{ fontSize: "18px" }}> Quiz Name</strong>
           </label>
           <input
             id="wd-name"
             className="form-control mt-2"
-            value={assignmentName}
-            onChange={(e) => setAssignmentName(e.target.value)}
+            value={quizTitle}
+            onChange={(e) => setQuizTitle(e.target.value)}
           />
           <textarea
             id="wd-description"
             className="mt-2 form-control"
-            value={assignmentDescription}
-            onChange={(e) => setAssignmentDescription(e.target.value)}
+            value={quizDescription}
+            onChange={(e) => setQuizDescription(e.target.value)}
           />
         </div>
         <div>
@@ -107,18 +98,18 @@ export default function AssignmentEditor() {
                 type="number"
                 id="wd-points"
                 className="form-control"
-                value={assignmentPoints}
-                onChange={(e) => setAssignmentPoints(Number(e.target.value))}
+                value={quizPoints}
+                onChange={(e) => setQuizPoints(Number(e.target.value))}
               />
             </div>
           </div>
           <div className="row mb-3 text-end">
             <div className="col">
-              <label htmlFor="wd-group">Assignment Group</label>
+              <label htmlFor="wd-group">Quiz Group</label>
             </div>
             <div className="col">
               <select id="wd-group" className="form-select">
-                <option value="ASSIGNMENTS">ASSIGNMENTS</option>
+                <option value="QUIZZES">QUIZZES</option>
               </select>
             </div>
           </div>
@@ -232,8 +223,8 @@ export default function AssignmentEditor() {
                     type="date"
                     id="wd-due-date"
                     className="form-control"
-                    onChange={(e) => setAssignmentDueDate(e.target.value)}
-                    value={assignmentDueDate}
+                    onChange={(e) => setQuizDueDate(e.target.value)}
+                    value={quizDueDate}
                   />
                 </div>
                 <div className="row">
@@ -248,10 +239,8 @@ export default function AssignmentEditor() {
                       type="date"
                       id="wd-available-from"
                       className="form-control"
-                      onChange={(e) =>
-                        setAssignmentAvailableDate(e.target.value)
-                      }
-                      value={assignmentAvailableDate}
+                      onChange={(e) => setQuizAvailableDate(e.target.value)}
+                      value={quizAvailableDate}
                     />
                   </div>
                   <div className="col-md-6">
@@ -265,8 +254,8 @@ export default function AssignmentEditor() {
                       type="date"
                       id="wd-available-until"
                       className="form-control"
-                      onChange={(e) => setAssignmentUntilDate(e.target.value)}
-                      value={assignmentUntilDate}
+                      onChange={(e) => setQuizUntilDate(e.target.value)}
+                      value={quizUntilDate}
                     />
                   </div>
                 </div>
@@ -276,7 +265,7 @@ export default function AssignmentEditor() {
           <hr />
           <div className="text-end">
             <Link
-              to={`/Kanbas/Courses/${cid}/Assignments`}
+              to={`/Kanbas/Courses/${cid}/Quizzes`}
               className="btn btn-secondary"
             >
               Cancel

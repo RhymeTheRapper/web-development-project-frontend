@@ -41,7 +41,6 @@ export default function Assignments() {
       cid as string
     );
     dispatch(setAssignments(assignments));
-    console.log("assignments", assignments);
   };
   useEffect(() => {
     fetchAssignments();
@@ -97,7 +96,10 @@ export default function Assignments() {
             {assignments
               .filter((assignment: any) => assignment.course === cid)
               .map((assignment: any) => (
-                <li className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex align-items-center">
+                <li
+                  key={assignment._id}
+                  className="wd-assignment-list-item list-group-item p-3 ps-1 d-flex align-items-center"
+                >
                   <BsGripVertical className="me-2 fs-3" />
                   <MdOutlineAssignment
                     className="me-2 fs-3"
