@@ -1,43 +1,70 @@
 import { createSlice } from "@reduxjs/toolkit";
+
+interface Quiz {
+  _id: string;
+  title: string;
+  course: string;
+  description: string;
+  type: "Graded Quiz" | "Practice Quiz" | "Graded Survey" | "Ungraded Survey";
+  point: number;
+  status: "Published" | "Unpublished";
+  assignmentGroup: "Quizzes" | "Exams" | "Assignments" | "Project";
+  shuffleAnswer: "Yes" | "No";
+  timeLimit: number;
+  multipleAttempts: "Yes" | "No";
+  howManyAttempts: number;
+  showCorrectAnswers: "Immediately" | "After Deadline" | "Never";
+  accessCode: string;
+  oneQuestionAtATime: "Yes" | "No";
+  webcamRequired: "Yes" | "No";
+  lockQuestionsAfterAnswering: "Yes" | "No";
+  due: string;
+  available: string;
+  dueDate: string;
+  availableDate: string;
+  untilDate: string;
+}
+
 const initialState = {
-  quizzes: [] as any[],
+  quizzes: [] as Quiz[],
 };
+
 const quizzesSlice = createSlice({
   name: "quizzes",
   initialState,
   reducers: {
     addQuiz: (state, { payload: quiz }) => {
-      const newQuiz: any = {
+      const newQuiz: Quiz = {
         _id: new Date().getTime().toString(),
         title: quiz.title,
         course: quiz.course,
-        available: quiz.available,
-        due: quiz.due,
         description: quiz.description,
-        quizType: quiz.quizType,
-        points: quiz.points,
-        assignmentGroup: quiz.assignmentGroup,
-        shuffleAnswers: quiz.shuffleAnswers,
-        timeLimit: quiz.timeLimit,
-        multipleAttempts: quiz.multipleAttempts,
-        showCorrectAnswers: quiz.showCorrectAnswers,
-        accessCode: quiz.accessCode,
-        oneQuestionAtATime: quiz.oneQuestionAtATime,
-        webcamRequired: quiz.webcamRequired,
-        lockQuestionsAfterAnswering: quiz.lockQuestionsAfterAnswering,
-        due_date: quiz.due_date,
-        available_date: quiz.available_date,
-        until_date: quiz.until_date,
+        type: quiz.type || "Graded Quiz",
+        point: quiz.point || 100,
+        status: quiz.status || "Unpublished",
+        assignmentGroup: quiz.assignmentGroup || "Quizzes",
+        shuffleAnswer: quiz.shuffleAnswer || "Yes",
+        timeLimit: quiz.timeLimit || 30,
+        multipleAttempts: quiz.multipleAttempts || "No",
+        howManyAttempts: quiz.howManyAttempts || 1,
+        showCorrectAnswers: quiz.showCorrectAnswers || "Immediately",
+        accessCode: quiz.accessCode || "",
+        oneQuestionAtATime: quiz.oneQuestionAtATime || "Yes",
+        webcamRequired: quiz.webcamRequired || "No",
+        lockQuestionsAfterAnswering: quiz.lockQuestionsAfterAnswering || "Yes",
+        due: quiz.due,
+        available: quiz.available,
+        dueDate: quiz.dueDate,
+        availableDate: quiz.availableDate,
+        untilDate: quiz.untilDate,
       };
-      state.quizzes = [...state.quizzes, newQuiz] as any;
+      state.quizzes = [...state.quizzes, newQuiz];
     },
     deleteQuiz: (state, { payload: quizId }) => {
-      state.quizzes = state.quizzes.filter((m: any) => m._id !== quizId);
+      state.quizzes = state.quizzes.filter((quiz) => quiz._id !== quizId);
     },
     updateQuiz: (state, { payload: quiz }) => {
-      state.quizzes = state.quizzes.map((m: any) =>
-        m._id === quiz._id ? quiz : m
-      ) as any;
+      state.quizzes = state.quizzes.map((q) => (q._id === quiz._id ? quiz : q));
     },
     setQuizzes: (state, action) => {
       state.quizzes = action.payload;
@@ -49,6 +76,7 @@ const quizzesSlice = createSlice({
     },
   },
 });
+
 export const { addQuiz, deleteQuiz, updateQuiz, setQuizzes, togglePublish } =
   quizzesSlice.actions;
 export default quizzesSlice.reducer;

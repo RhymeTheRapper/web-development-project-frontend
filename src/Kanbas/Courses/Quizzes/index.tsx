@@ -45,10 +45,10 @@ export default function Quizzes() {
   }, []);
   const getQuizStatus = (quiz: any) => {
     const currentDate = new Date();
-    const availableDate = new Date(quiz.available_date);
-    const untilDate = new Date(quiz.until_date);
+    const availableDate = new Date(quiz.availableDate);
+    const untilDate = new Date(quiz.untilDate);
     if (currentDate < availableDate) {
-      return `Not available until ${new Date(quiz.available_date).toLocaleDateString()}`;
+      return `Not available until ${new Date(quiz.availableDate).toLocaleDateString()}`;
     } else if (currentDate > untilDate) {
       return "Closed";
     } else {
@@ -59,13 +59,11 @@ export default function Quizzes() {
     return [...quizzes].sort((a, b) => {
       switch (sortBy) {
         case "dueDate":
-          return (
-            new Date(a.due_date).getTime() - new Date(b.due_date).getTime()
-          );
+          return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
         case "availableDate":
           return (
-            new Date(a.available_date).getTime() -
-            new Date(b.available_date).getTime()
+            new Date(a.availableDate).getTime() -
+            new Date(b.availableDate).getTime()
           );
         default:
           return a.title.localeCompare(b.title);
