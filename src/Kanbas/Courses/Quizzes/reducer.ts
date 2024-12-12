@@ -1,32 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface Quiz {
-  _id: string;
-  title: string;
-  course: string;
-  description: string;
-  type: "Graded Quiz" | "Practice Quiz" | "Graded Survey" | "Ungraded Survey";
-  point: number;
-  status: "Published" | "Unpublished";
-  assignmentGroup: "Quizzes" | "Exams" | "Assignments" | "Project";
-  shuffleAnswer: "Yes" | "No";
-  timeLimit: number;
-  multipleAttempts: "Yes" | "No";
-  howManyAttempts: number;
-  showCorrectAnswers: "Immediately" | "After Deadline" | "Never";
-  accessCode: string;
-  oneQuestionAtATime: "Yes" | "No";
-  webcamRequired: "Yes" | "No";
-  lockQuestionsAfterAnswering: "Yes" | "No";
-  due: string;
-  available: string;
-  dueDate: string;
-  availableDate: string;
-  untilDate: string;
-}
-
 const initialState = {
-  quizzes: [] as Quiz[],
+  quizzes: [] as any[],
 };
 
 const quizzesSlice = createSlice({
@@ -34,7 +9,7 @@ const quizzesSlice = createSlice({
   initialState,
   reducers: {
     addQuiz: (state, { payload: quiz }) => {
-      const newQuiz: Quiz = {
+      const newQuiz: any = {
         _id: new Date().getTime().toString(),
         title: quiz.title,
         course: quiz.course,

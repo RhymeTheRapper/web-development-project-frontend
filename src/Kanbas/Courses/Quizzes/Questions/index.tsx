@@ -36,7 +36,7 @@ export default function Questions() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await questionsClient.fetchQuestions(qid);
+        const response = await questionsClient.fetchQuestions(qid as string);
         setQuestions(response);
       } catch (error) {
         console.error("Error fetching questions:", error);

@@ -17,6 +17,8 @@ import { Button, Modal, Dropdown } from "react-bootstrap";
 import * as coursesClient from "../client";
 import * as quizzesClient from "./client";
 import QuizControlButtons from "./QuizControlButtons";
+import * as questionsClient from "./Questions/client";
+
 export default function Quizzes() {
   const dispatch = useDispatch();
   const { cid } = useParams();
@@ -25,6 +27,10 @@ export default function Quizzes() {
   const [showModal, setShowModal] = useState(false);
   const [deleteId, setDeleteId] = useState("");
   const [sortBy, setSortBy] = useState("title");
+  const [quizQuestionCounts, setQuizQuestionCounts] = useState<{
+    [key: string]: number;
+  }>({});
+
   const handleDeleteClick = (quizId: string) => {
     setDeleteId(quizId);
     setShowModal(true);
@@ -35,10 +41,27 @@ export default function Quizzes() {
     setDeleteId("");
     setShowModal(false);
   };
+
+  const fetchQuizQuestions = async (quizId: string) => {
+    try {
+      const questions = await questionsClient.fetchQuestions(quizId);
+      return questions.length;
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+      return 0;
+    }
+  };
   const fetchQuizzes = async () => {
     const quizzes = await coursesClient.findQuizzesForCourse(cid as string);
     dispatch(setQuizzes(quizzes));
-    console.log("quizzes", quizzes);
+
+    // Fetch question counts for each quiz
+    const questionCounts: { [key: string]: number } = {};
+    for (const quiz of quizzes) {
+      const count = await fetchQuizQuestions(quiz._id);
+      questionCounts[quiz._id] = count;
+    }
+    setQuizQuestionCounts(questionCounts);
   };
   useEffect(() => {
     fetchQuizzes();
@@ -148,8 +171,8 @@ export default function Quizzes() {
                         <strong>Due </strong>
                         {quiz.due} |{" "}
                       </span>
-                      <span>{quiz.points} pts | </span>
-                      <span>{quiz.questionsAmount} Questions </span>
+                      <span>{quiz.point} pts | </span>
+                      <span>{quizQuestionCounts[quiz._id] || 0} Questions</span>
                     </div>
                   </div>
                   {currentUser.role === "FACULTY" ? (
