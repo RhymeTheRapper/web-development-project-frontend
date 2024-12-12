@@ -2,108 +2,122 @@ import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FaPencilAlt } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import * as coursesClient from "../../Courses/client";
 export default function QuizDetails() {
-  const { cid, aid } = useParams();
+  const { cid, qid } = useParams();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const [quiz, setQuiz] = useState(
+    {
+      _id: "",
+      title: "",
+      description: "",
+      point: 0,
+      dueDate: "",
+      availableDate: "",
+      untilDate: "",
+      type: "Graded Quiz",
+      assignmentGroup: "Quizzes",
+      shuffleAnswer: true,
+      timeLimit: 20,
+      multipleAttempts: 1,
+      showCorrectAnswers: false,
+      accessCode: "",
+      oneQuestionAtATime: true,
+      webcamRequired: false,
+      lockQuestionsAfterAnswering: false,
+    }
+  );
 
-  const { quizzes } = useSelector((state: any) => state.quizzesReducer);
-  let quiz = quizzes.find((quiz: any) => quiz._id === aid) ?? {
-    title: "",
-    course: cid,
-    description: "",
-    type: "Graded Quiz",
-    point: "100",
-    status: "Unpublished",
-    assignmentGroup: "Quizzes",
-    shuffleAnswer: "Yes",
-    timeLimit: "20",
-    multipleAttempts: "No",
-    howManyAttempts: "1",
-    showCorrectAnswers: "Immediately",
-    accessCode: "",
-    oneQuestionAtATime: "Yes",
-    webcamRequired: "No",
-    lockQuestionsAfterAnswering: "No",
-    dueDate: "",
-    availableDate: "",
-    untilDate: "",
+  useEffect(() => {
+    const loadQuiz = async () => {
+      try {
+        const quizzes = await coursesClient.findQuizzesForCourse(cid as string);
+        const foundQuiz = quizzes.find((q: any) => q._id === qid);
+        if (foundQuiz) {
+          setQuiz(foundQuiz);
+        }
+
+      } catch (error) {
+        console.error("Error loading quiz:", error);
+      }
+    };
+    loadQuiz();
+  }, [cid, qid]);
+
+  if (currentUser.role !== "FACULTY") {
+    return (
+      <div className="container mt-5">
+        <h1 className="text-center mb-4">{quiz.title}</h1>
+        <div className="d-flex justify-content-center">
+          <Link to={`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}/take`} className="btn btn-primary">
+            Start Quiz
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="container mt-5">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>{quiz.quizTitle}</h1>
-        <div className="float-center">
-          <Link to={`/quizzes/${quiz._id}/preview`} className="btn btn-outline-primary me-2">
+      <h1 className="text-center mb-4">{quiz.title}</h1>
+      <div className="d-flex justify-content-center mb-4">
+        <div>
+          <Link to={`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}/preview`} className="btn btn-secondary me-2">
             Preview
           </Link>
-          <Link to={`/quizzes/${quiz._id}/edit`} className="btn btn-outline-primary me-2">
-            <FaPencilAlt />
+          <Link to={`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}/detailsEditor`} className="btn btn-secondary">
+            <FaPencilAlt className="me-1" />
             Edit
           </Link>
         </div>
       </div>
+
       <table className="table table-borderless">
         <tbody>
-          <tr>
-            <th className="text-end">Quiz Type</th>
-            <td>{quiz.quizType}</td>
-          </tr>
-          <tr>
-            <th className="text-end">Points</th>
-            <td>{quiz.quizPoints}</td>
-          </tr>
-          <tr>
-            <th className="text-end">Assignment Group</th>
-            <td>{quiz.quizGroup}</td>
-          </tr>
-          <tr>
-            <th className="text-end">Shuffle Answers</th>
-            <td>{quiz.shuffleAnswer}</td>
-          </tr>
-          <tr>
-            <th className="text-end">Time Limit</th>
-            <td>{quiz.timeLimit} Minutes</td>
-          </tr>
-          <tr>
-            <th className="text-end">Multiple Attempts</th>
-            <td>{quiz.multipleAttempts}</td>
-          </tr>
-          <tr>
-            <th className="text-end">Show Correct Answers</th>
-            <td>{quiz.showCorrectAnswers}</td>
-          </tr>
-          <tr>
-            <th className="text-end">One Question at a Time</th>
-            <td>{quiz.quizOneQuestionAtATime}</td>
-          </tr>
-          <tr>
-            <th className="text-end">Webcam Required</th>
-            <td>{quiz.webcamRequired}</td>
-          </tr>
-          <tr>
-            <th className="text-end">Lock Questions After Answering</th>
-            <td>{quiz.lockQuestions}</td>
-          </tr>
+          {[
+            { label: "Quiz Type", value: quiz.type },
+            { label: "Points", value: quiz.point },
+            { label: "Assignment Group", value: quiz.assignmentGroup },
+            { label: "Shuffle Answers", value: quiz.shuffleAnswer ? "Yes" : "No" },
+            { label: "Time Limit", value: `${quiz.timeLimit} Minutes` },
+            { label: "Multiple Attempts", value: quiz.multipleAttempts ? "Yes" : "No" },
+            { label: "View Responses", value: "Always" },
+            { label: "Show Correct Answers", value: quiz.showCorrectAnswers ? "Yes" : "No" },
+            { label: "One Question at a Time", value: quiz.oneQuestionAtATime ? "Yes" : "No" },
+            { label: "Webcam Required", value: quiz.webcamRequired ? "Yes" : "No" },
+            { label: "Lock Questions After Answering", value: quiz.lockQuestionsAfterAnswering ? "Yes" : "No" }
+          ].map((item, index) => (
+            <tr key={index}>
+              <th style={{ textAlign: 'right', paddingRight: '20px', width: '200px' }}>
+                {item.label}
+              </th>
+              <td>{item.value}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      <table className="table table-borderless mt-4">
-        <thead>
-          <tr className="text-center">
-            <th>Due</th>
-            <th>Available From</th>
-            <th>Until</th>
-          </tr>
-        </thead>
-        <hr />
-        <tbody>
-          <tr className="text-center">
-            <td>{quiz.quizDueDate || "N/A"}</td>
-            <td>{quiz.quizAvailableDate || "N/A"}</td>
-            <td>{quiz.quizUntilDate || "N/A"}</td>
-          </tr>
-        </tbody>
-        <hr />
-      </table>
+
+      <div className="mt-4">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Due</th>
+              <th>For</th>
+              <th>Available from</th>
+              <th>Until</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{new Date(quiz.dueDate).toLocaleDateString() || "N/A"}</td>
+              <td>Everyone</td>
+              <td>{new Date(quiz.availableDate).toLocaleDateString() || "N/A"}</td>
+              <td>{new Date(quiz.untilDate).toLocaleDateString() || "N/A"}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -169,9 +169,9 @@ export default function Quizzes() {
                       </span>
                       <span>
                         <strong>Due </strong>
-                        {quiz.due} |{" "}
+                        {new Date(quiz.dueDate).toLocaleDateString()} |{" "}
                       </span>
-                      <span>{quiz.point} pts | </span>
+                      <span>{quizQuestionCounts[quiz._id] * 4} pts | </span>
                       <span>{quizQuestionCounts[quiz._id] || 0} Questions</span>
                     </div>
                   </div>

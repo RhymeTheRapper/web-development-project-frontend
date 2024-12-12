@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Card, ListGroup } from "react-bootstrap";
+import { getUserAnswers } from "./client";
+import { useSelector } from "react-redux";
 
 interface QuizResult {
   score: number;
@@ -23,13 +25,11 @@ interface QuizResult {
 export default function QuizResults() {
   const { qid } = useParams();
   const [results, setResults] = useState<QuizResult | null>(null);
-
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        // Replace with your actual API call
-        const response = await fetch(`/api/quizzes/${qid}/results`);
-        const data = await response.json();
+        const data = await getUserAnswers(qid as string, currentUser._id);
         setResults(data);
       } catch (error) {
         console.error("Error fetching results:", error);

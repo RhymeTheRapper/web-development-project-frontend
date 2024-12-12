@@ -52,11 +52,13 @@ export default function Courses({ courses }: { courses: any[] }) {
             <Route path="Assignments/:aid" element={<AssignmentEditor />} />
             <Route path="People" element={<PeopleTable users={users} />} />
             <Route path="Quizzes" element={<Quizzes />} />
-            <Route path="Quizzes/:qid/questionsEditor" element={<QuestionsEditor />} />
+            <Route path="Quizzes/new" element={<QuizEditor />} />
             <Route path="Quizzes/:qid/take" element={<Questions />} />
             <Route path="Quizzes/:qid/results" element={<QuizResults />} />
-            <Route path="quizes/:qid/edit" element={<QuizEditor />} />
-            <Route path="quizzes/:qid/details" element={<Details />} />
+            <Route path="Quizzes/:qid/detailsEditor" element={<QuizEditor />} />
+            <Route path="Quizzes/:qid/questionsEditor" element={<QuestionsEditor />} />
+            <Route path="Quizzes/:qid/details" element={<Details />} />
+            <Route path="Quizzes/:qid/preview" element={<Questions />} />
           </Routes>
         </div>
       </div>

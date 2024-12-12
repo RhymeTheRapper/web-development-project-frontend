@@ -92,8 +92,17 @@ export const getUserAnswers = async (quizId: string, userId: string) => {
 
 // Start new quiz attempt
 export const startQuizAttempt = async (quizId: string, userId: string) => {
-  const { data } = await axios.post(
-    `${QUIZZES_API}/${quizId}/user/${userId}/answers`
-  );
-  return data;
+  try {
+    const { data } = await axios.post(
+      `${QUIZZES_API}/${quizId}/user/${userId}/answers`
+    );
+    if (!data) {
+      // If the DAO returns false, it means no more attempts allowed or outside date range
+      return false;
+    }
+    return data;
+  } catch (error) {
+    console.error("Error creating new quiz attempt:", error);
+    throw error;
+  }
 };

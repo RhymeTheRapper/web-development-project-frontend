@@ -29,7 +29,7 @@ export default function QuizDetails() {
     dueDate: "",
     availableDate: "",
     untilDate: "",
-    quizType: "Graded Quiz",
+    type: "Graded Quiz",
     assignmentGroup: "Quizzes",
   });
   const [shuffleAnswers, setShuffleAnswers] = useState(true);
@@ -71,8 +71,9 @@ export default function QuizDetails() {
       }
     };
 
-    if (cid && qid !== "new") {
+    if (cid && (qid !== "new" || qid !== undefined)) {
       loadQuiz();
+      console.log(qid);
     } else {
       setLoading(false);
     }
@@ -80,16 +81,17 @@ export default function QuizDetails() {
 
   const onSave = async (publish: boolean = false) => {
     if (!cid) return;
-    const isEditing = qid !== "new";
+    const isEditing = qid !== "new" && qid !== undefined;
 
     const newQuiz = {
       ...quiz,
+      _id: qid,
       course: cid,
       published: publish,
       title: quiz.title,
       description: quiz.description,
       points: quiz.point,
-      quizType: quiz.quizType,
+      type: quiz.type,
       assignmentGroup: quiz.assignmentGroup,
       shuffleAnswers: shuffleAnswers,
       timeLimit: timeLimit,
@@ -109,6 +111,7 @@ export default function QuizDetails() {
         await quizzesClient.updateQuiz(newQuiz);
         dispatch(updateQuiz(newQuiz));
       } else {
+        console.log(newQuiz);
         const createdQuiz = await coursesClient.createQuizForCourse(
           cid,
           newQuiz
@@ -194,8 +197,8 @@ export default function QuizDetails() {
             <div className="col-9">
               <select
                 className="form-select"
-                value={quiz.quizType}
-                onChange={(e) => setQuiz({ ...quiz, quizType: e.target.value })}
+                value={quiz.type}
+                onChange={(e) => setQuiz({ ...quiz, type: e.target.value })}
               >
                 <option>Graded Quiz</option>
                 <option>Practice Quiz</option>
