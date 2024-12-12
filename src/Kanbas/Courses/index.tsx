@@ -11,8 +11,9 @@ import * as client from "./client";
 import Quizzes from "./Quizzes";
 import Questions from "./Quizzes/Questions";
 import QuizResults from "./Quizzes/Questions/ResultsPage";
-import Editor from "./Quizzes/Editor";
 import QuestionsEditor from "./Quizzes/QuestionsEditor";
+import QuizEditor from "./Quizzes/Editor"
+import Details from "./Quizzes/Details";
 
 export default function Courses({ courses }: { courses: any[] }) {
   const { cid } = useParams();
@@ -51,13 +52,11 @@ export default function Courses({ courses }: { courses: any[] }) {
             <Route path="Assignments/:aid" element={<AssignmentEditor />} />
             <Route path="People" element={<PeopleTable users={users} />} />
             <Route path="Quizzes" element={<Quizzes />} />
-            <Route path="Quizzes/:qid/detailsEditor" element={<Editor />} />
-            <Route
-              path="Quizzes/:qid/questionsEditor"
-              element={<QuestionsEditor />}
-            />
+            <Route path="Quizzes/:qid/questionsEditor" element={<QuestionsEditor />} />
             <Route path="Quizzes/:qid/take" element={<Questions />} />
             <Route path="Quizzes/:qid/results" element={<QuizResults />} />
+            <Route path="quizes/:qid/edit" element={<QuizEditor />} />
+            <Route path="quizzes/:qid/details" element={<Details />} />
           </Routes>
         </div>
       </div>
