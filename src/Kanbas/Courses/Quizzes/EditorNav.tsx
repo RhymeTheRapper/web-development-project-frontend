@@ -1,27 +1,31 @@
-import { useLocation } from "react-router";
+import { Link, useLocation } from "react-router-dom";
+import { useParams } from "react-router";
 
-export default function EditorNav() {
+function EditorNav() {
+  const { cid, qid } = useParams();
   const { pathname } = useLocation();
+  const isActive = (path: string) => pathname.includes(path);
+
   return (
-    <div>
-      <ul className="nav nav-pills">
-        <li className="nav-item">
-          <a
-            href="#/details"
-            className={`nav-link ${pathname.includes("Details") ? "active" : ""}`}
-          >
-            Details
-          </a>
-        </li>
-        <li className="nav-item">
-          <a
-            href="#/questions"
-            className={`nav-link ${pathname.includes("questions") ? "active" : ""}`}
-          >
-            Questions
-          </a>
-        </li>
-      </ul>
-    </div>
+    <ul className="nav nav-tabs mb-3">
+      <li className="nav-item">
+        <Link
+          to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/detailsEditor`}
+          className={`nav-link ${isActive("/details") ? "active" : ""}`}
+        >
+          Details
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link
+          to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/questionsEditor`}
+          className={`nav-link ${isActive("/questions") ? "active" : ""}`}
+        >
+          Questions
+        </Link>
+      </li>
+    </ul>
   );
 }
+
+export default EditorNav;

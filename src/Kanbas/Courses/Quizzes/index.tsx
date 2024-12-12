@@ -158,7 +158,7 @@ export default function Quizzes() {
                   <div className="flex-grow-1">
                     <Link
                       className="wd-quiz-link"
-                      to={`/Kanbas/Courses/${cid}/quizzes/${quiz._id}`}
+                      to={`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}/details`}
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
                       <strong>{quiz.title}</strong>
